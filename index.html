@@ -66,6 +66,33 @@
         <div id="card--details" class="hidden flex"></div>
         <div id="card--container" class="flex flex-wrap justify-center items-center m-8"></div>
         </section>
+        <!-- Pagination section -->
+    <section id="pagination--container" class="flex flex-col lg:flex-row justify-center items-center">
+        <!-- Back button -->
+        <button id="btn--goBack" onclick="goBack()" class="hidden mr-10 w-full lg:w-auto bg-black text-white font-bold m-0 lg:m-5 hover:bg-red-600 transition h-10 rounded-md px-8">Back to</button>
+        <!-- Buttons panel for navigation -->
+        <div id="btn--panel" class="flex items-center justify-center mb-5 lg:mb-0">
+        <!-- Navigation buttons with font awesome icons -->
+            <button id="btn--first-page"><i class="fa-solid fa-angles-left bg-black text-white hover:bg-red-600 transition lg:w-20 p-2"></i></button>
+            <button id="btn--prev-page"><i class="fa-solid fa-angle-left bg-black text-white ml-3 hover:bg-red-600 transition lg:w-20 p-2"></i></button>
+            <button id="btn--next-page"><i class="fa-solid fa-angle-right bg-black text-white ml-3 hover:bg-red-600 transition lg:w-20 p-2"></i></button>
+            <button id="btn--last-page"><i class="fa-solid fa-angles-right bg-black text-white ml-3 hover:bg-red-600 transition lg:w-20 p-2"></i></button>
+        </div>
+        <div id="btn--panel-details" class="hidden">
+            <button id="btn--first-page-details"><i class="fa-solid fa-backward-fast hidden"></i></button>
+            <button id="btn--prev-page-details"><i class="fa-solid fa-backward hidden"></i></button>
+            <button id="btn--next-page-details"><i class="fa-solid fa-forward hidden"></i></button>
+            <button id="btn--last-page-details"><i class="fa-solid fa-forward-fast hidden"></i></button>
+        </div>
+        <div id="page--navigation" class="flex flex-col items-center justify-center">
+        <p id="current--page" class="hidden"></p>
+        <p id="total--pages" class="hidden"></p>
+        <div>
+            <input type="number" id="page--input" placeholder="" class="hidden" />
+            <button id="btn--gotopage" class="hidden"></button>
+        </div>
+        </div>
+        </section>
 
     </main> 
     <script src="main.js"></script>
