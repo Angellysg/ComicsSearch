@@ -112,3 +112,29 @@ const getDataApi = async (
     hideElement(["#loader"]);
     return data;
 };
+
+//Render Api results
+const renderApiResults = async (
+    resourceSearch,
+    inputSearch,
+    orderSearch,
+    limitParam,
+    offsetParam
+) => {
+    const results = await getDataApi(
+    resourceSearch,
+    inputSearch,
+    orderSearch,
+    limitParam,
+    offsetParam
+    );
+    const cardContainer = $("#card--container");
+    cardContainer.innerHTML = "";
+    results.data.results.forEach((result) => {
+        if (resourceSearch === "comics") {
+        renderComic(result);
+    } else if (resourceSearch === "characters") {
+        renderCharacter(result);
+    }
+    });
+};
