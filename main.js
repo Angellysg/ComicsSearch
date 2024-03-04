@@ -191,3 +191,41 @@ if (isComic && relatedDataUrl) {
     }
     showElement(["#btn--goBack"]);
 };
+//Show comic details
+const showComicDetails = async (
+    imageUrl,
+    title,
+    releaseDate,
+    writers,
+    description,
+    charactersUrl,
+    offsetParam,
+    limitParam
+) => {
+    showDetails(imageUrl, title, releaseDate, writers, description);
+    showElement(["#loader"]);
+    const fullCharactersUrl = `${charactersUrl}?offset=${offsetParam}&limit=${limitParam}&${ts}${publicKey}${hash}`;
+    const charactersData = await fetchData(fullCharactersUrl);
+    hideElement(["#loader"]);
+    $("#card--container").innerHTML = `
+    <div>
+    <h3>Characters:</h3>
+    <p>Results: ${charactersData.data.total}</p>
+    </div>
+    `;
+    if (charactersData.data.results.length === 0) {
+    $("#card--container").innerHTML += `
+    <div>
+    <p>No results found</p>
+    </div>
+    `;
+    } else {
+    charactersData.data.results.forEach((character) => {
+        renderCharacter(character);
+    });
+    }
+    detailOffset = offsetParam;
+    detailTotalPages = Math.ceil(charactersData.data.total / resultsPerPage);
+    detailCurrentPage = Math.floor(detailOffset / resultsPerPage) + 1;
+    updateDetailDisabledProperty();
+};
