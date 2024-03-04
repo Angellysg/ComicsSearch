@@ -275,3 +275,34 @@ $("#card--container").innerHTML = `
 
 updateDetailDisabledProperty();
 };
+//Render character
+const renderCharacter = (character) => {
+    const imageUrlCharacter =
+      character.thumbnail.path + "." + character.thumbnail.extension;
+    const name = character.name;
+    const description = character.description;
+    const comicsUrl = character.comics.collectionURI; 
+    const characterCard = document.createElement("div");
+    characterCard.className = "character-card";
+    characterCard.innerHTML = `
+    <div class="flex justify-center items-center  w-full comic-card card-container hover:translate-y-[-5px]">
+    <div class="flex flex-col w-48 justity-center items-center m-8">
+      <img class="flex justity-center items-center min-w-40 max-w-48" src="${imageUrlCharacter}">
+      <div/>
+    <div class="flex content-center">
+    <h2 class="flex items-center font-semibold">${name}</h2>
+    <div/>
+    <div/>
+    `;
+    characterCard.addEventListener("click", async () => {
+        showCharacterDetails(
+        imageUrlCharacter,
+        name,
+        description,
+        comicsUrl,
+        offset,
+        resultsPerPage
+    );
+    });
+    $("#card--container").appendChild(characterCard);
+};
