@@ -348,3 +348,23 @@ const renderComic = (result) => {
 
     $("#card--container").appendChild(comicCard);
 }; 
+//Back button
+const goBack = async () => {
+    showElement([
+      "#card--container",
+      "#results--container",
+      "#pagination--container",
+      "#btn--panel",
+    ]);
+    hideElement(["#card--details", "#btn--panel-details"]);
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    await renderApiResults(typeSelected, searchTerm, searchSort, limit, offset);
+    await renderTotalResults(typeSelected, searchTerm, searchSort, limit, offset);
+    detailOffset = 0;
+    detailCurrentPage = 1;
+    detailTotalPages = 1;
+    updateDetailDisabledProperty();
+    updateDisabledProperty();
+
+    $("#btn--goBack").classList.add("hidden"); // Hides the "Back" button
+};
