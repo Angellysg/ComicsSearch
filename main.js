@@ -615,3 +615,34 @@ const fetchDataAndRender = async (
       );
     }
 };
+
+const initializeApp = async () => {
+    await renderApiResults("comics", "", "a-z", 20, 0);
+    await renderTotalResults("comics", "", "a-z", 20, 0);
+    updateDisabledProperty();
+    //Events
+    //Btn search
+    $("#btn--search").addEventListener("click", searchFunction);
+    //Btn next page
+    $("#btn--next-page").addEventListener("click", goToNextPage);
+    //Btn next page details
+    $("#btn--next-page-details").addEventListener("click", goToDetailNextPage);
+    //Btn prev page
+    $("#btn--prev-page").addEventListener("click", goToPrevPage);
+    //Btn prev page details
+    $("#btn--prev-page-details").addEventListener("click", goToDetailPrevPage);
+    //Btn first page
+    $("#btn--first-page").addEventListener("click", goToFirstPage);
+    //Btn first page details
+    $("#btn--first-page-details").addEventListener("click", goToFirstPageDetails);
+    //Btn last page
+    $("#btn--last-page").addEventListener("click", goToLastPage);
+    //Btn las page details
+    $("#btn--last-page-details").addEventListener("click", goToLastPageDetails);
+    //Input selected page
+    $("#btn--gotopage").addEventListener("click", goToSelectedPage);
+    //Hide-show select options
+    $("#search--type").addEventListener("change", manageOptions);
+};
+  
+window.onload = initializeApp;
