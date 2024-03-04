@@ -138,3 +138,56 @@ const renderApiResults = async (
     }
     });
 };
+//Show details
+const showDetails = async (
+    imageUrl,
+    titleOrName,
+    releaseDate,
+    writers,
+    description,
+    isComic,
+    relatedDataUrl
+) => {
+    hideElement(["#results--container", "#btn--panel"]);
+    showElement(["#card--details", "#btn--panel-details"]);
+
+    const formattedReleaseDate = releaseDate
+    ? formatReleaseDate(releaseDate)
+    : "";
+    $("#card--details").innerHTML = `
+    <div class="flex justify-center items-center  w-full">
+        <div class="flex flex-col m-8">
+        <img class="flex w-full"  src="${imageUrl}" alt="${titleOrName}">
+        </div> 
+        <div>
+        <h2>${titleOrName}</h2>
+        ${
+            isComic && releaseDate
+            ? `<p>Launch date: <span>${formattedReleaseDate}</span></p>`
+            : ""
+    }
+        ${writers ? `<p>Writers: <span>${writers}</span></p>` : ""}
+        <p>Description: <span>${
+            description || "No description available"
+        }</span></p>
+        </div>  
+    </div>
+    `;
+if (isComic && relatedDataUrl) {
+    const relatedData = await fetchData(relatedDataUrl);
+    const charactersContainer = $("#card--container");
+    if (charactersContainer) {
+        charactersContainer.innerHTML = `<h3>${
+            isComic ? "Characters" : "Comics"
+        } in this ${isComic ? "Comic" : "Character"}:</h3>`;
+        relatedData.data.results.forEach((relatedItem) => {
+        if (isComic) {
+            renderCharacter(relatedItem);
+        } else {
+            renderComic(relatedItem);
+        }
+        });
+    }
+    }
+    showElement(["#btn--goBack"]);
+};
