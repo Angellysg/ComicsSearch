@@ -306,3 +306,45 @@ const renderCharacter = (character) => {
     });
     $("#card--container").appendChild(characterCard);
 };
+// Render comics
+const renderComic = (result) => {
+    let detailComic = result;
+    const imageUrlComic = `${result.thumbnail.path}.${result.thumbnail.extension}`;
+    const id = result.id;
+    const title = result.title;
+    const releaseDate = result.dates.find(
+    (date) => date.type === "onsaleDate"
+    ).date;
+    const writers = result.creators.items
+        .filter((creator) => creator.role === "writer")
+        .map((writer) => writer.name);
+    const description = result.description;
+    let charactersUrl = result.characters.collectionURI;
+    const comicCard = document.createElement("div");
+    comicCard.className = "comic-card";
+    comicCard.id = id;
+    comicCard.innerHTML = `
+    <div class="flex justify-center items-center  w-full comic-card card-container hover:translate-y-[-5px]">
+    <div class="flex flex-col w-48 justity-center items-center m-8">
+    <img class="flex justity-center items-center min-w-40 max-w-48" src="${imageUrlComic}">
+    <div/>
+    <div class="flex content-center">
+    <h2 class="flex items-center font-semibold">${title}</h2>
+    <div/>
+    <div/>
+    `;
+    comicCard.addEventListener("click", async () => {
+      showComicDetails(
+        imageUrlComic,
+        title,
+        releaseDate,
+        writers.join(", "),
+        description,
+        charactersUrl,
+        offset,
+        resultsPerPage
+    );
+    });
+
+    $("#card--container").appendChild(comicCard);
+}; 
