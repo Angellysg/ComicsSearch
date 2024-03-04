@@ -435,3 +435,21 @@ const updateDisabledProperty = () => {
     $("#btn--next-page-details").disabled = currentPage >= totalPages;
     $("#btn--last-page-details").disabled = currentPage >= totalPages;
 };
+//Search parameters
+const getSearchParameters = () => {
+    return {
+      typeSelected: $("#search--type").value,
+      searchTerm: $("#input--search").value,
+      searchSort: $("#search--sort").value,
+    };
+};
+// Update URL with search parameters
+  const updateURL = () => {
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    const searchParams = new URLSearchParams({
+      typeSelected,
+      searchTerm,
+      searchSort,
+    });
+    history.pushState({}, "", `${location.pathname}?${searchParams}`);
+};
