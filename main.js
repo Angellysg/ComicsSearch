@@ -16,3 +16,99 @@ const resultsPerPage = 20;
 let currentPage = 1;
 let totalPages = 1;
 let detailCharacter;
+
+//Functions
+//Hide elements
+const hideElement = (selectors) => {
+    selectors.forEach((selector) => {
+        const element = $(selector);
+        if (element) {
+            element.classList.add("hidden");
+        }
+    });
+};
+
+//Show elements
+const showElement = (selectors) => {
+    selectors.forEach((selector) => {
+        const element = $(selector);
+        if (element) {
+            element.classList.remove("hidden");
+        }
+    });
+};
+
+//Format date
+const formatReleaseDate = (dateString) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+        undefined,
+        options
+    );
+    return formattedDate;
+};
+
+//URL construction
+const buildApiUrl = (
+    resource,
+    inputSearch,
+    orderSearch,
+    offsetParam,
+    limitParam
+) => {
+    let url = `${baseURL}${resource}?`;
+
+    if (inputSearch) {
+        url += `${resource === "comics" ? "titleStartsWith" : "nameStartsWith"
+            }=${inputSearch}&`;
+    }
+
+    switch (orderSearch.toLowerCase()) {
+        case "a-z":
+            url += `orderBy=${resource === "comics" ? "title" : "name"}&`;
+            break;
+        case "z-a":
+            url += `orderBy=-${resource === "comics" ? "title" : "name"}&`;
+            break;
+        case "-focDate":
+            if (resource === "comics") {
+                url += "orderBy=-focDate&";
+            }
+            break;
+        case "focDate":
+            if (resource === "comics") {
+                url += "orderBy=focDate&";
+            }
+            break;
+    }
+
+    url += `offset=${offsetParam}&limit=${limitParam}&${ts}${publicKey}&${hash}`;
+    return url;
+};
+
+//Api fetch
+const fetchData = async (url) => {
+    const response = await fetch(url);
+    return response.json();
+};
+
+//API call
+const getDataApi = async (
+    resourceSearch,
+    inputSearch,
+    orderSearch,
+    limitParam,
+    offsetParam
+) => {
+    showElement(["#loader"]);
+    const urlApi = buildApiUrl(
+        resourceSearch,
+        inputSearch,
+        orderSearch,
+        offsetParam,
+        limitParam
+    );
+    const data = await fetchData(urlApi);
+    hideElement(["#loader"]);
+    return data;
+};
