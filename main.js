@@ -407,3 +407,31 @@ const getTotalResults = async (
     // $("#current--page").textContent = `CURRENT PAGE: ${pagination.currentPage}`;
     // $("#total--pages").textContent = `TOTAL PAGES: ${pagination.totalPages}`;
 };
+//Update disabled property
+const updateDisabledProperty = () => {
+    if (offset > 0) {
+      $("#btn--prev-page").disabled = false;
+      $("#btn--first-page").disabled = false;
+    } else {
+      $("#btn--prev-page").disabled = true;
+      $("#btn--first-page").disabled = true;
+    }
+  
+    if (offset < (totalPages - 1) * resultsPerPage) {
+      $("#btn--next-page").disabled = false;
+      $("#btn--last-page").disabled = false;
+    } else {
+      $("#btn--next-page").disabled = true;
+      $("#btn--last-page").disabled = true;
+    }
+  };
+  
+//Update disabled property details
+  const updateDetailDisabledProperty = () => {
+    const totalPages = Math.ceil(detailTotalPages);
+    const currentPage = Math.floor(detailOffset / resultsPerPage) + 1;
+    $("#btn--prev-page-details").disabled = detailOffset <= 0;
+    $("#btn--first-page-details").disabled = detailOffset <= 0;
+    $("#btn--next-page-details").disabled = currentPage >= totalPages;
+    $("#btn--last-page-details").disabled = currentPage >= totalPages;
+};
