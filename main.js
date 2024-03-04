@@ -368,3 +368,42 @@ const goBack = async () => {
 
     $("#btn--goBack").classList.add("hidden"); // Hides the "Back" button
 };
+//Total results
+const getTotalResults = async (
+    resourceSearch,
+    inputSearch,
+    orderSearch,
+    limitParam,
+    offsetParam
+  ) => {
+    const data = await getDataApi(
+      resourceSearch,
+      inputSearch,
+      orderSearch,
+      limitParam,
+      offsetParam
+    );
+    totalPages = Math.ceil(data.data.total / resultsPerPage);
+    const currentPage = Math.floor(offsetParam / resultsPerPage) + 1;
+    return { totalResults: data.data.total, totalPages, currentPage };
+  };
+//Render total results
+  const renderTotalResults = async (
+    resourceSearch,
+    inputSearch,
+    orderSearch,
+    limitParam,
+    offsetParam
+  ) => {
+    const pagination = await getTotalResults(
+      resourceSearch,
+      inputSearch,
+      orderSearch,
+      limitParam,
+      offsetParam
+    );
+  
+    $("#results--cuantiti").textContent = `Results: ${pagination.totalResults}`;
+    // $("#current--page").textContent = `CURRENT PAGE: ${pagination.currentPage}`;
+    // $("#total--pages").textContent = `TOTAL PAGES: ${pagination.totalPages}`;
+};
