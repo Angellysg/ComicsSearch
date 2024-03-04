@@ -453,3 +453,165 @@ const getSearchParameters = () => {
     });
     history.pushState({}, "", `${location.pathname}?${searchParams}`);
 };
+//Fetch and render
+const fetchDataAndRender = async (
+    typeSelected,
+    searchTerm,
+    searchSort,
+    limit,
+    offset
+  ) => {
+    await getDataApi(typeSelected, searchTerm, searchSort, limit, offset);
+    await renderApiResults(typeSelected, searchTerm, searchSort, limit, offset);
+    await renderTotalResults(typeSelected, searchTerm, searchSort, limit, offset);
+};
+// Search
+    const searchFunction = async () => {
+    offset = 0;
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    await fetchDataAndRender(typeSelected, searchTerm, searchSort, limit, offset);
+    updateDisabledProperty();
+    updateURL();
+};
+//Next page
+    const goToNextPage = async () => {
+    $("#card--container").innerHTML = "";
+    if (currentPage <= 1) {
+      offset += 20;
+      updateDisabledProperty();
+    }
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    await fetchDataAndRender(typeSelected, searchTerm, searchSort, limit, offset);
+};
+//Prev page
+    const goToPrevPage = async () => {
+    offset -= 20;
+    updateDisabledProperty();
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    await fetchDataAndRender(typeSelected, searchTerm, searchSort, limit, offset);
+};
+//First page
+  const goToFirstPage = async () => {
+    offset = 0;
+    updateDisabledProperty();
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    await fetchDataAndRender(typeSelected, searchTerm, searchSort, limit, offset);
+};
+//Last page
+    const goToLastPage = async () => {
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    const { totalPages } = await getTotalResults(
+      typeSelected,
+      searchTerm,
+      searchSort,
+      limit,
+      offset
+    );
+    if (totalPages > 0) {
+      offset = (totalPages - 1) * resultsPerPage;
+      updateDisabledProperty();
+      await fetchDataAndRender(
+        typeSelected,
+        searchTerm,
+        searchSort,
+        limit,
+        offset
+      );
+    }
+};
+//Selected page
+  const goToSelectedPage = async () => {
+    const { typeSelected, searchTerm, searchSort } = getSearchParameters();
+    const selectedPage = $("#page--input").valueAsNumber;
+    const { totalPages } = await getTotalResults(
+      typeSelected,
+      searchTerm,
+      searchSort,
+      limit,
+      offset
+    );
+    if (selectedPage > 0 && selectedPage <= totalPages) {
+      offset = (selectedPage - 1) * resultsPerPage;
+      await fetchDataAndRender(
+        typeSelected,
+        searchTerm,
+        searchSort,
+        limit,
+        offset
+      );
+      updateDisabledProperty();
+    } else {
+      alert("Invalid page number");
+    }
+    $("#page--input").value = "";
+};
+//Hide options select
+  const manageOptions = () => {
+    if ($("#search--type").value === "characters") {
+      hideElement(["#sort--title-new", "#sort--title-old"]);
+    } else {
+      showElement(["#a-z", "#z-a", "#sort--title-new", "#sort--title-old"]);
+    }
+};
+//Next page details
+  const goToDetailNextPage = async () => {
+    detailOffset += 20;
+    updateDetailDisabledProperty();
+    showCharacterDetails(
+      detailCharacter.imageUrlCharacter,
+      detailCharacter.name,
+      detailCharacter.description,
+      detailCharacter.comicsUrl,
+      detailOffset,
+      resultsPerPage
+    );
+};
+//Prev page details
+  const goToDetailPrevPage = async () => {
+    detailOffset -= resultsPerPage;
+    if (detailOffset < 0) {
+      detailOffset = 0;
+    }
+    updateDetailDisabledProperty();
+    showCharacterDetails(
+      detailCharacter.imageUrlCharacter,
+      detailCharacter.name,
+      detailCharacter.description,
+      detailCharacter.comicsUrl,
+      detailOffset,
+      resultsPerPage
+    );
+};
+
+//First page details
+  const goToFirstPageDetails = async () => {
+    if (detailOffset !== 0) {
+      detailOffset = 0;
+      updateDetailDisabledProperty();
+      showCharacterDetails(
+        detailCharacter.imageUrlCharacter,
+        detailCharacter.name,
+        detailCharacter.description,
+        detailCharacter.comicsUrl,
+        detailOffset,
+        resultsPerPage
+      );
+    }
+};
+//Last page details
+  const goToLastPageDetails = async () => {
+    const totalPages = Math.ceil(detailTotalPages);
+    const lastPageOffset = (totalPages - 1) * resultsPerPage;
+    if (lastPageOffset !== detailOffset) {
+      detailOffset = lastPageOffset;
+      updateDetailDisabledProperty();
+      showCharacterDetails(
+        detailCharacter.imageUrlCharacter,
+        detailCharacter.name,
+        detailCharacter.description,
+        detailCharacter.comicsUrl,
+        detailOffset,
+        resultsPerPage
+      );
+    }
+};
